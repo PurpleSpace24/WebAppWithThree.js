@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D</title>
+    <link rel="stylesheet" href="style.css"/>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/92/three.min.js"></script>
+
+
+</head>
+<body style="overflow: hidden; ">
+    <div class="obj_3d">
+        <a href="index.html #main">
+            <button class="go_back">Back</button>
+        </a>
+    </div>
+    <p>Use "Space" to make left cube jump and to see the sphere moving to the other cube.<br> 
+        Use "ArrowUp" to make right cube jump and to see the sphere moving back on the previous position.</p>
+    <script>
+
+    //-------- CAMERA, SCENE, LIGHT, CUBE, CUBE1, SPHERE --------
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x696969);
+
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 1, 10000);
+    const renderer = new THREE.WebGLRenderer();
+    
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+    
+    var geometry = new THREE.CubeGeometry(320, 320, 320);
+    var material = new THREE.MeshLambertMaterial({ color: 0x1ec876 });
+    var loader = new THREE.TextureLoader();
+    var cube = new THREE.Mesh(geometry, material);  // left cube
+
+    var geometry1 = new THREE.CubeGeometry(320, 320, 320);
+    var material1 = new THREE.MeshLambertMaterial({ color: 0x191970 });
+    var cube1 = new THREE.Mesh(geometry1, material1);  // right cube
+
+    const sphereGeometry = new THREE.SphereGeometry(180, 32, 32);
+    const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x953a56 });
+    const sphereMesh = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+    sphereMesh.position.z += 10;
+    sphereMesh.position.y += 320;
+    sphereMesh.position.x -= 600;
+
+    cube.position.x -= 600;
+
+    cube1.position.x = 700;
+
+    scene.add(cube);
+    scene.add(cube1);
+    scene.add(sphereMesh);
+    
+    camera.position.z = 1500;
+    
+    var pointLight = new THREE.PointLight(0xffffff);
+    pointLight.position.set(0, 6000, 8000);
+    scene.add(pointLight);
+
+    function render() {
+        requestAnimationFrame(render);
+        
+        renderer.render(scene, camera);
+    };
+
+    render();
+    //-------- END CAMERA,SCENE,LIGHT,CUBE,CUBE1,SPHERE --------
+    
+    //-------- LEFT CUBE AND SPHERE JUMPING --------
+    let isJumping = false;
+    let jumpHeight = 320;
+    let jumpSpeed = 5;
+    let jumpDirection = 1;
+
+    addEventListener("keydown", e => {
+    if(e.code === 'Space'){
+            jump();
+        }
+        
+    });
+
+    function jump() {
+        if (isJumping) return;
+        isJumping = true;
+        jumpDirection = 1;
+        requestAnimationFrame(jumpAnimation);
+        requestAnimationFrame(sphereMeshMoveUpRight);
+    }
+
+    function jumpAnimation() {
+        cube.position.y += jumpSpeed * jumpDirection;
+        cube.rotation.z -= 0.01;
+
+        if (cube.position.y >= jumpHeight1) {
+            jumpDirection = -1;
+        }
+        if (cube.position.y <= 0) {
+            cube.position.y = 0;
+            cube.rotation.z = 0.00;
+
+            isJumping = false;
+
+            requestAnimationFrame(sphereMeshMoveDownRight1);
+            requestAnimationFrame(sphereMeshMoveDownRight2);
+            requestAnimationFrame(sphereMeshMoveDownRight3);
+            requestAnimationFrame(sphereMeshMoveDownRight4);
+            requestAnimationFrame(sphereMeshMoveDownRight5);
+            requestAnimationFrame(sphereMeshMoveDownRight6);
+            requestAnimationFrame(sphereMeshMoveDownRight7);
+
+            return;
+        }
+        requestAnimationFrame(jumpAnimation);
+    }
+
+    
+    function sphereMeshMoveUpRight() {
+        let targetPosition = new THREE.Vector3(cube1.position.x, 320, cube1.position.z);
+        let distance = targetPosition.distanceTo(sphereMesh.position);
+
+        if (distance <= 20) {
+            return;
+        }
+
+        let moveDistance = Math.min(distance, 10);
+        let direction = targetPosition.clone().sub(sphereMesh.position).normalize();
+        let moveVector = direction.multiplyScalar(moveDistance);
+
+        sphereMesh.position.add(moveVector);
+
+        requestAnimationFrame(sphereMeshMoveUpRight);
+    }
+
+    function sphereMeshMoveDownRight1() {
+        sphereMesh.position.y += 10;
+    }
+
+    function sphereMeshMoveDownRight2() {
+        sphereMesh.position.y += 10;
+        sphereMesh.position.x += 5;
+    }
+
+    function sphereMeshMoveDownRight3() {
+        sphereMesh.position.y -= 10;
+        sphereMesh.position.x += 5;
+    }
+
+    function sphereMeshMoveDownRight4() {
+        sphereMesh.position.y -= 10;
+        sphereMesh.position.x += 5;
+    }
+
+    function sphereMeshMoveDownRight5() {
+        sphereMesh.position.y += 10;
+        sphereMesh.position.x += 5;
+    }
+
+    function sphereMeshMoveDownRight6() {
+        sphereMesh.position.y += 10;
+        sphereMesh.position.x += 5;
+    }
+
+    function sphereMeshMoveDownRight7() {
+        sphereMesh.position.y += 10;
+        sphereMesh.position.x -= 5;
+    }
+
+    //-------- END LEFT CUBE AND SPHERE JUMPING --------
+
+    //-------- RIGHT CUBE AND SPHERE JUMPING --------
+
+    let isJumping1 = false;
+    let jumpHeight1 = 230;
+    let jumpSpeed1 = 5;
+    let jumpDirection1 = 1;
+
+    document.onkeydown = (e) => {
+        e = e || window.event;
+        if (e.key === 'ArrowUp') {
+            jump1();
+        }
+    } 
+     
+    function jump1() {
+        if(isJumping1) return;
+        isJumping1 = true;
+        jumpDirection1 = 1;
+        requestAnimationFrame(jumpAnimation1);
+        requestAnimationFrame(sphereMeshMoveUpLeft);
+    }
+
+    function jumpAnimation1() {
+        cube1.position.y += jumpSpeed1 * jumpDirection1;
+        cube1.rotation.z += 0.01;
+
+        if (cube1.position.y >= jumpHeight1) {
+            jumpDirection1 = -1;
+        }
+        if (cube1.position.y <= 0) {
+            cube1.position.y = 0;
+            cube1.rotation.z = 0.00;
+
+            isJumping1 = false;
+
+            requestAnimationFrame(sphereMeshMoveDownLeft1);
+            requestAnimationFrame(sphereMeshMoveDownLeft2);
+            requestAnimationFrame(sphereMeshMoveDownLeft3);
+            requestAnimationFrame(sphereMeshMoveDownLeft4);
+            requestAnimationFrame(sphereMeshMoveDownLeft5);
+            requestAnimationFrame(sphereMeshMoveDownLeft6);
+            requestAnimationFrame(sphereMeshMoveDownLeft7);
+
+            return;
+        }
+        requestAnimationFrame(jumpAnimation1);
+    }
+
+    function sphereMeshMoveUpLeft() {
+        let targetPosition = new THREE.Vector3(cube.position.x, 320, cube.position.z);
+        let distance = targetPosition.distanceTo(sphereMesh.position);
+
+        if (distance <= 20) {
+            return;
+        }
+
+        let moveDistance = Math.min(distance, 10);
+        let direction = targetPosition.clone().sub(sphereMesh.position).normalize();
+        let moveVector = direction.multiplyScalar(moveDistance);
+
+        sphereMesh.position.add(moveVector);
+
+        requestAnimationFrame(sphereMeshMoveUpLeft);
+    }
+
+    function sphereMeshMoveDownLeft1() {
+        sphereMesh.position.y += 10;
+    }
+
+    function sphereMeshMoveDownLeft2() {
+        sphereMesh.position.y += 10;
+        sphereMesh.position.x += 5;
+    }
+
+    function sphereMeshMoveDownLeft3() {
+        sphereMesh.position.y -= 10;
+        sphereMesh.position.x += 5;
+    }
+
+    function sphereMeshMoveDownLeft4() {
+        sphereMesh.position.y -= 10;
+        sphereMesh.position.x += 5;
+    }
+
+    function sphereMeshMoveDownLeft5() {
+        sphereMesh.position.y += 10;
+        sphereMesh.position.x += 5;
+    }
+
+    function sphereMeshMoveDownLeft6() {
+        sphereMesh.position.y += 10;
+        sphereMesh.position.x += 5;
+    }
+
+    function sphereMeshMoveDownLeft7() {
+        sphereMesh.position.y += 10;
+        sphereMesh.position.x -= 5;
+    }
+
+    //-------- END RIGHT CUBE JUMPING --------
+    </script>
+
+    </body>
+</html>

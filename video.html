@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Videos</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body>
+    <div class="obj_3d">
+        <a href="index.html #main">
+            <button class="go_back">Back</button>
+        </a>
+    </div>
+
+    <p>Play with the buttons and playing speed :)</p>
+
+    <div id="vidBox">
+        <div id="videCont"> 
+            <video id="video1" controls> 
+                <a class="close"></a>
+                <source src="videos/Special 4K HDR 120FPS Dolby Vision Demo-(1080p60).mp4" type="video/mp4">
+                <source src="videos/Special 4K HDR 120FPS Dolby Vision Demo-(1080p60).ogg" type="video/mp4">
+                Your browser does not support this video format.
+            </video>
+            <div id="controls">
+                <button id="stepBackward" onclick="stepBackward()"><i class="fa fa-step-backward"></i></button>
+                <button id="playpause" onclick="playPause()"><i class="fa fa-play"></i></button>
+                <button id="stepForward" onclick="stepForward()"><i class="fa fa-step-forward"></i></button>
+                <button onclick="stop()"><i class="fa fa-stop"></i></button>
+                <button id="muteButton" onclick="muteUnmute()"><i class="fas fa-volume-up"></i> </button>                
+                <button onclick="volUp()"><i class="fa fa-plus"></i></button>
+                <button onclick="volDown()"><i class="fa fa-minus"></i></button>
+                <button onclick="fullscreen()"><i class="fa fa-expand"></i></button>
+                <br>
+                Playing Speed 
+                <select name="playingspeed" id="playingspeed">
+                    <option value="0.25">0.25</option>
+                    <option value="0.5">0.5</option>
+                    <option value="0.75">0.75</option>
+                    <option value="1" selected>Normal</option>
+                    <option value="1.25">1.25</option>
+                    <option value="1.5">1.5</option>
+                    <option value="1.75">1.75</option>
+                    <option value="2">2</option>
+                </select>
+            </div>
+
+            <video id="video2" controls>
+                <a class="close"></a>
+                <source src="videos/Hong Kong(1080p).mp4" type="video/mp4">
+                <source src="videos/Hong Kong(1080p).mp4" type="video/ogg">
+                Your browser does not support this video format.
+            </video>
+            <div id="controls2">
+                <button id="stepBackwardtwo" onclick="stepBackwardtwo()"><i class="fa fa-step-backward"></i></button>
+                <button id="playpausetwo" onclick="playPausetwo()"><i class="fa fa-play"></i></button>
+                <button id="stepForwardtwo" onclick="stepForwardtwo()"><i class="fa fa-step-forward"></i></button>
+                <button onclick="stoptwo()"><i class="fa fa-stop"></i></button>
+                <button id="muteButtontwo" onclick="muteUnmutetwo()"><i class="fas fa-volume-up"></i> </button>                
+                <button onclick="volUptwo()"><i class="fa fa-plus"></i></button>
+                <button onclick="volDowntwo()"><i class="fa fa-minus"></i></button>
+                <button onclick="fullscreentwo()"><i class="fa fa-expand"></i></button>
+                <br>
+                Playing Speed 
+                <select name="playingspeed1" id="playingspeed1">
+                    <option value="0.25">0.25</option>
+                    <option value="0.5">0.5</option>
+                    <option value="0.75">0.75</option>
+                    <option value="1" selected>Normal</option>
+                    <option value="1.25">1.25</option>
+                    <option value="1.5">1.5</option>
+                    <option value="1.75">1.75</option>
+                    <option value="2">2</option>
+                </select>
+            </div>
+
+        </div>
+        <br><br><br><br><br>
+    </div>
+
+    <script>
+        // VIDEO 1
+        var video = document.getElementById("video1");
+        var button = document.getElementById("muteButton");
+        var button1 = document.getElementById("playpause");
+
+        function playPause() {
+            if (video.paused) {
+            video.play();
+            button1.innerHTML = '<i class="fa fa-pause"></i>';
+            } else {
+            video.pause();        
+            button1.innerHTML = '<i class="fa fa-play"></i>';
+            }
+        }
+         /* works */
+         function stop() {
+            video.currentTime = 0;
+            video.pause();
+
+            button1.innerHTML = '<i class="fa fa-play"></i>';
+        }
+
+        function muteUnmute() {
+            if (video.muted) {
+            video.muted = false;
+            button.innerHTML = '<i class="fas fa-volume-up"></i>';
+            } else {
+            video.muted = true;  
+            button.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            }
+        }
+    
+        function volUp() {
+            if(video.muted){
+                button.innerHTML = '<i class="fas fa-volume-up"></i>';
+                video.muted = false;
+            }
+
+            if (video.volume < 1) {
+                video.volume += 0.1;
+            }
+        }
+        function volDown() {
+            if (video.volume > 0) {
+            video.volume -= 0.1;
+            }
+            if(video.volume == 0){
+                button.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                video.muted = true;
+            }
+            button.innerHTML = '<i class="fas fa-volume-up"></i>';
+            video.muted = false;
+        }
+        function fullscreen() {
+            if (video.requestFullscreen) {
+            video.requestFullscreen();
+            } else if (video.webkitRequestFullscreen) {
+            video.webkitRequestFullscreen();
+            } else if (video.msRequestFullscreen) {
+            video.msRequestFullscreen();
+            }
+        }
+
+        function stepForward(){
+            video.currentTime += 10;
+        }
+        function stepBackward(){
+            video.currentTime -= 5;
+        }
+
+        document.getElementById("playingspeed").addEventListener("change", function() {
+            var speed = document.getElementById("playingspeed").value;
+            document.getElementById("video1").playbackRate = speed;
+        });
+
+        
+        // VIDEO 2
+        var video2 = document.getElementById("video2");
+        var button2 = document.getElementById("muteButtontwo");
+        var button3 = document.getElementById("playpausetwo");
+
+        function playPausetwo() {
+            if (video2.paused) {
+                video2.play();
+                button3.innerHTML = '<i class="fa fa-pause"></i>';
+            } else {
+                video2.pause();
+                button3.innerHTML = '<i class="fa fa-play"></i>';
+
+            }
+        }
+
+        function stoptwo() {
+            video2.currentTime = 0;
+            video2.pause();
+
+            button3.innerHTML = '<i class="fa fa-play"></i>';
+        }
+
+        function muteUnmutetwo() {
+            if (video2.muted) {
+                video2.muted = false;
+                button2.innerHTML = '<i class="fas fa-volume-up"></i>';
+            } else {
+                video2.muted = true;  
+                button2.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            }
+        }
+    
+        function volUptwo() {
+            if(video2.muted){
+                button2.innerHTML = '<i class="fas fa-volume-up"></i>';
+                video2.muted = false;
+            }
+            if (video2.volume < 1) {
+                    video2.volume += 0.1;
+            }
+        }
+        function volDowntwo() {
+            if (video2.volume > 0) {
+                video2.volume -= 0.1;
+            }
+            button2.innerHTML = '<i class="fas fa-volume-up"></i>';
+            video2.muted = false;
+        }
+        function fullscreentwo() {
+            if (video2.requestFullscreen) {
+                video2.requestFullscreen();
+            } else if (video2.webkitRequestFullscreen) {
+                video2.webkitRequestFullscreen();
+            } else if (video2.msRequestFullscreen) {
+                video2.msRequestFullscreen();
+            }
+        }
+
+        function stepForwardtwo(){
+            video2.currentTime += 10;
+        }
+        function stepBackwardtwo(){
+            video2.currentTime -= 5;
+        }
+
+        document.getElementById("playingspeed1").addEventListener("change", function() {
+            var speed1 = document.getElementById("playingspeed1").value;
+            document.getElementById("video2").playbackRate = speed1;
+        });
+
+    </script>
+</body>
+</html>
